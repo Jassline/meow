@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>我的消費紀錄 | MEOW SELECT</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">MEOW SELECT</a>
+        <div class="nav-links">
+            <a href="../index.html" >首頁</a>
+            <a href="about.html">品牌故事</a> 
+            <a href="shop.html">所有商品</a>
+            <a href="member.html">會員中心</a>
+            <button id="cart-btn">🛒 購物車</button>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 800px; margin-top: 50px;">
+        <h2 style="margin-bottom: 30px;">📋 您的消費紀錄</h2>
+        <div id="user-order-history">
+            </div>
+    </div>
+
+    <script>
+        function renderUserOrders() {
+            const container = document.getElementById('user-order-history');
+            
+            // 1. 先抓出目前登入的會員是誰
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            // 如果沒登入，就叫他滾去登入（開玩笑的，是引導他去登入）
+            if (!currentUser) {
+                container.innerHTML = '<p style="text-align:center;">請先登入會員才能查看紀錄喔喵！</p>';
+                return;
+            }
+
+            // 2. 抓出所有的訂單紀錄
+            let allHistory = JSON.parse(localStorage.getItem('orderHistory')) || [];
+
+            // 3. ✨ 關鍵過濾：只留下 email 跟我一樣的訂單
+            // (假設你在結帳存入訂單時，有存入 customer.email)
+            let myHistory = allHistory.filter(order => order.customer.email === currentUser.email);
+            
+            if (myHistory.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:100px 0;">
+                        <p style="font-size: 50px;">😿</p>
+                        <p>您（${currentUser.name}）還沒有在 MEOW SELECT 消費過喔！</p>
+                        <a href="shop.html" style="color:#ff9f43;">去商城逛逛</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // member-history.html 的渲染邏輯修復
+            container.innerHTML = '';
+            myHistory.reverse().forEach(order => {
+                // 這裡是在整理清單細項
+                let itemsList = order.items.map(i => `<li>${i.name} (x${i.qty}) - $${i.price * i.qty}</li>`).join('');
+                
+                container.innerHTML += `
+                    <div style="background:white; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05); border-left: 5px solid #ff9f43;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px dashed #eee; padding-bottom: 10px;">
+                            <span style="font-weight:bold; color:#333;">📅 訂單日期：${order.orderDate}</span>
+                            <span style="color:#888; font-size:12px;"># ${order.orderId}</span>
+                        </div>
+
+                        <div style="font-size: 14px; color: #555; background: #fff9f4; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                            <p style="margin: 3px 0;">👤 <strong>收件人：</strong>${order.customer.name}</p>
+                            <p style="margin: 3px 0;">📞 <strong>連絡電話：</strong>${order.customer.phone}</p>
+                            <p style="margin: 3px 0;">📍 <strong>配送地址：</strong>${order.customer.address}</p>
+                            <p style="margin: 3px 0;">💳 <strong>付款方式：</strong>${order.paymentMethod} (${order.paymentDetail || '無'})</p>
+                            <p style="margin: 3px 0;">🧾 <strong>發票資訊：</strong>${order.invoice}</p>
+                        </div>
+
+                        <ul style="list-style:none; padding:0 10px; margin-bottom:15px; font-size:14px; color:#666;">
+                            <p style="font-weight:bold; color:#333; margin-bottom:5px;">🛒 購買清單：</p>
+                            ${itemsList}
+                        </ul>
+
+                        <div style="text-align:right; font-weight:bold; font-size:1.1rem; color:#ee5253; border-top: 1px solid #eee; margin-top:10px; padding-top:10px;">
+                            總額：$${order.totalAmount}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        window.onload = renderUserOrders;
+    </script>
+        <aside class="cart-sidebar" id="cartSidebar" role="dialog" aria-modal="true" aria-labelledby="cartTitle" tabindex="-1" hidden>
+        <div class="cart-header">
+            <h3 id="cartTitle">購物袋</h3>
+            <button id="close-btn" type="button" class="icon-btn" aria-label="關閉購物車">&times;</button>
+        </div>
+
+        <div id="cart-items-list" class="cart-items" aria-live="polite"></div>
+
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>總計</span>
+                <span id="cart-total-display">$0</span>
+            </div>
+            <button class="checkout-btn" type="button" onclick="location.href='checkout.html'">
+                前往結帳
+            </button>
+        </div>
+    </aside>
+    <script src="../js/chat.js"></script>
+</body>
+</html>

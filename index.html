@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="MEOW SELECT 喵不可言｜依貓咪年齡挑選用品，打造極簡好用的貓咪用品電商。" />
+  <title>MEOW SELECT | 喵不可言</title>
+
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/home.css" />
+
+</head>
+
+<body class="home">
+  <!-- 跳到主要內容：鍵盤使用者/無障礙 -->
+  <a class="skip-link" href="#main">跳到主要內容</a>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="主導覽">
+      <a href="index.html" class="logo" aria-label="MEOW SELECT 回首頁">MEOW SELECT</a>
+
+      <!-- 行動版導覽按鈕 -->
+      <button class="nav-toggle" id="navToggle" type="button"
+              aria-controls="navLinks" aria-expanded="false" aria-label="開啟導覽選單">
+        ☰
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" aria-current="page" style="color:#ff9f43; font-weight:bold;">首頁</a>
+        <a href="pages/about.html">品牌故事</a>
+        <a href="pages/shop.html">所有商品</a>
+        <a href="pages/member.html">會員中心</a>
+
+        <button id="cart-btn" type="button" aria-controls="cartSidebar" aria-expanded="false">
+          🛒 購物車
+        </button>
+      </div>
+    </nav>
+  </header>
+  <!-- 購物車 HTML (修復版) -->
+
+  <aside class="cart-sidebar">
+    <div class="cart-header">
+      <h3>購物袋</h3>
+      <button id="close-btn" type="button" class="icon-btn">&times;</button>
+    </div>
+    <div id="cart-items-list" class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>總計</span>
+        <span id="cart-total-display">$0</span>
+      </div>
+      <button class="checkout-btn" type="button" onclick="location.href='pages/checkout.html'">前往結帳</button>
+    </div>
+  </aside>
+  <div class="overlay" id="cartOverlay" hidden></div>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-wrap">
+        <div class="hero-card">
+          <h1>為貓而生，因妳而選。</h1>
+          <p>全台灣最懂主子的極簡電商平台</p>
+
+          <div class="hero-actions">
+            <a class="btn primary" href="pages/shop.html">立即逛逛</a>
+            <a class="btn ghost" href="#agePick">依年齡挑選</a>
+          </div>
+
+          <div class="hero-badges">
+            <span>🚚 快速出貨</span>
+            <span>🧾 清楚標示</span>
+            <span>💬 AI客服</span>
+          </div>
+        </div>
+
+        <!-- 右邊圓形主視覺：放貓咪圖片 -->
+        <div class="hero-visual" aria-hidden="true"></div>
+      </div>
+    </section>
+
+
+    <section class="home-block">
+      <div class="container">
+          <h2 class="block-title">本週精選</h2>
+          <!-- Promo Carousel -->
+          <div class="promo-carousel" id="promoCarousel" aria-label="首頁廣告輪播" aria-roledescription="carousel">
+            <div class="promo-track" id="promoTrack">
+              <a class="promo-slide is-active" href="pages/shop.html?age=kitten" aria-label="幼貓新手必備：立即逛逛">
+                <div class="promo-media promo-1" aria-hidden="true"></div>
+                <div class="promo-text">
+                  <p class="promo-tag">新手必備</p>
+                  <h3 class="promo-title">幼貓入門組</h3>
+                  <p class="promo-desc">吃喝 / 如廁 / 睡窩，一次備齊超省心</p>
+                  <span class="promo-cta">立即選購 →</span>
+                </div>
+              </a>
+
+              <a class="promo-slide" href="pages/shop.html?age=adult" aria-label="成貓放電玩具：立即逛逛">
+                <div class="promo-media promo-2" aria-hidden="true"></div>
+                <div class="promo-text">
+                  <p class="promo-tag">人氣熱銷</p>
+                  <h3 class="promo-title">成貓放電玩具</h3>
+                  <p class="promo-desc">抓板 / 逗貓棒 / 益智玩具，陪主子每天運動</p>
+                  <span class="promo-cta">立即選購 →</span>
+                </div>
+              </a>
+
+              <a class="promo-slide" href="pages/shop.html?age=senior" aria-label="熟齡友善照護：立即逛逛">
+                <div class="promo-media promo-3" aria-hidden="true"></div>
+                <div class="promo-text">
+                  <p class="promo-tag">熟齡照護</p>
+                  <h3 class="promo-title">熟齡友善用品</h3>
+                  <p class="promo-desc">低入口便盆 / 階梯 / 保暖睡窩，貼心照顧更輕鬆</p>
+                  <span class="promo-cta">立即選購 →</span>
+                </div>
+              </a>
+            </div>
+
+            <button class="promo-btn prev" type="button" id="promoPrev" aria-label="上一張">‹</button>
+            <button class="promo-btn next" type="button" id="promoNext" aria-label="下一張">›</button>
+
+            <div class="promo-dots" aria-label="輪播頁籤">
+              <button class="dot is-active" type="button" data-dot="0" aria-label="第 1 張"></button>
+              <button class="dot" type="button" data-dot="1" aria-label="第 2 張"></button>
+              <button class="dot" type="button" data-dot="2" aria-label="第 3 張"></button>
+            </div>
+          </div>
+
+          <h2 class="block-title" id="agePick" style="margin-top:28px;">Category</h2>
+  <p class="block-sub">依貓咪年齡挑選</p>
+
+  <section class="catwall" aria-label="分類拼貼牆">
+  <!-- 上排：三張大卡 -->
+  <div class="catwall-top">
+    <a class="cw-card cw-big cw-kitten" href="pages/shop.html?age=kitten" aria-label="幼貓 0-12 個月">
+      <div class="cw-label">
+        <div class="cw-title">KITTEN</div>
+        <div class="cw-sub">幼貓（0–12M）</div>
+      </div>
+      <div class="cw-media" aria-hidden="true"></div>
+      <span class="cw-cta">逛幼貓專區 →</span>
+    </a>
+
+    <a class="cw-card cw-big cw-adult" href="pages/shop.html?age=adult" aria-label="成貓 1-7 歲">
+      <div class="cw-label">
+        <div class="cw-title">ADULT</div>
+        <div class="cw-sub">成貓（1–7Y）</div>
+      </div>
+      <div class="cw-media" aria-hidden="true"></div>
+      <span class="cw-cta">逛成貓專區 →</span>
+    </a>
+
+    <a class="cw-card cw-big cw-senior" href="pages/shop.html?age=senior" aria-label="熟齡 7 歲以上">
+      <div class="cw-label">
+        <div class="cw-title">SENIOR</div>
+        <div class="cw-sub">熟齡（7Y+）</div>
+      </div>
+      <div class="cw-media" aria-hidden="true"></div>
+      <span class="cw-cta">逛熟齡專區 →</span>
+    </a>
+  </div>
+
+  <!-- 下排：（4個） -->
+  <div class="catwall-bottom">
+    <a class="cw-card cw-small" href="pages/shop.html?age=kitten&tag=eat" aria-label="幼貓｜吃喝">
+      <div class="cw-mini">
+        <span class="cw-mini-title">EAT</span>
+        <span class="cw-mini-sub">吃喝用品</span>
+      </div>
+      <div class="cw-icon">🥣</div>
+    </a>
+
+    <a class="cw-card cw-small" href="pages/shop.html?age=adult&tag=play" aria-label="成貓｜玩具">
+      <div class="cw-mini">
+        <span class="cw-mini-title">PLAY</span>
+        <span class="cw-mini-sub">放電玩具</span>
+      </div>
+      <div class="cw-icon">🧶</div>
+    </a>
+
+    <a class="cw-card cw-small" href="pages/shop.html?age=senior&tag=sleep" aria-label="熟齡｜睡窩">
+      <div class="cw-mini">
+        <span class="cw-mini-title">SLEEP</span>
+        <span class="cw-mini-sub">保暖睡窩</span>
+      </div>
+      <div class="cw-icon">🛏️</div>
+    </a>
+
+    <a class="cw-card cw-small" href="pages/shop.html?age=senior&tag=care" aria-label="熟齡｜照護">
+      <div class="cw-mini">
+        <span class="cw-mini-title">CARE</span>
+        <span class="cw-mini-sub">熟齡照護</span>
+      </div>
+      <div class="cw-icon">🧸</div>
+    </a>
+  </div>
+
+  <div class="catwall-footer">
+    <a class="btn ghost" href="pages/shop.html">view all →</a>
+  </div>
+</section>
+
+
+        </div>
+      </section>
+
+
+  <!-- B. 公告 + 會員小卡 -->
+  <section class="notice-area">
+    <div class="container notice-grid">
+      <div class="notice-card">
+        <div class="notice-head">
+          <h3>最新公告</h3>
+          <a href="pages/about.html" class="mini-link">view more →</a>
+        </div>
+        <ul class="notice-list">
+          <li><span class="date">2026.01.04</span> 免運活動：滿 $999 免運 ✨</li>
+          <li><span class="date">2026.01.03</span> 幼貓入門組上架：新手必備一次購足</li>
+          <li><span class="date">2026.01.01</span> 熟齡保暖睡窩限量到貨</li>
+        </ul>
+      </div>
+
+      <div class="member-card">
+        <h3>會員專區</h3>
+        <p>登入即可查看訂單、專屬優惠</p>
+        <a class="btn primary" href="pages/member.html">前往登入/註冊</a>
+        <div class="mini-actions">
+          <a href="pages/forget-password.html">忘記密碼</a>
+          <a href="pages/member-history.html">消費紀錄</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C. 熱銷排行榜 -->
+  <section class="ranking">
+    <div class="container">
+      <div class="section-head">
+        <h2>熱銷排行榜</h2>
+        <a class="mini-link" href="pages/shop.html">看全部 →</a>
+      </div>
+
+      <div class="rank-grid">
+        <a class="rank-card" href="pages/product-detail.html?id=3">
+  <span class="rank-badge">1</span>
+  <div class="rank-img"></div>
+  <div class="rank-info">
+    <h4>鮮味貓罐頭</h4><p>$30</p>
+  </div>
+</a>
+
+<a class="rank-card" href="pages/product-detail.html?id=2">
+  <span class="rank-badge">2</span>
+  <div class="rank-img"></div>
+  <div class="rank-info">
+    <h4>檸檬除臭結團低塵貓砂</h4><p>$150</p>
+  </div>
+</a>
+
+<a class="rank-card" href="pages/product-detail.html?id=1">
+  <span class="rank-badge">3</span>
+  <div class="rank-img"></div>
+  <div class="rank-info">
+    <h4>零感除臭系列木薯混合貓砂</h4><p>$350</p>
+  </div>
+</a>
+
+<a class="rank-card" href="pages/product-detail.html?id=4">
+  <span class="rank-badge">4</span>
+  <div class="rank-img"></div>
+  <div class="rank-info">
+    <h4>幻影逗貓棒</h4><p>$50</p>
+  </div>
+</a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- D + E. 好評 + 快速入口 -->
+  <section class="trust-area">
+    <div class="container trust-grid">
+      <div class="reviews">
+        <div class="section-head">
+          <h2>主子好評</h2>
+        </div>
+        <div class="review-cards">
+          <div class="review-card">「包裝超可愛，貓咪馬上就去抓！」<span>— 小咪媽</span></div>
+          <div class="review-card">「熟齡便盆真的好用，爸媽也說清理方便。」<span>— 團團家</span></div>
+          <div class="review-card">「出貨快、客服回覆也很親切。」<span>— 阿橘爸</span></div>
+        </div>
+      </div>
+
+      <div class="quick-links">
+        <h2>快速入口</h2>
+        <a class="quick-item" href="pages/shop.html">🛍️ 所有商品</a>
+        <a class="quick-item" href="pages/about.html">🏷️ 品牌故事</a>
+        <a class="quick-item" href="pages/checkout.html">💳 前往結帳</a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+
+  <footer class="site-footer">
+    <small>&copy; <span id="year"></span> MEOW SELECT. 僅供 114-1 多媒體程式設計期末專案使用。</small>
+  </footer>
+
+  <!-- 如果 home.js/cart.js 沒用到 jQuery，建議不要載入 jQuery（更快） -->
+  <!-- <script defer src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
+  <!-- JS：只留一套，順序固定 -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script src="js/home.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/chat.js"></script>
+
+<script>
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>訂單結帳 | MEOW SELECT</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">MEOW SELECT</a>
+        <div class="nav-links">
+            <a href="../index.html" >首頁</a>
+            <a href="about.html">品牌故事</a> 
+            <a href="shop.html">所有商品</a>
+            <a href="member.html">會員中心</a>
+            <button id="cart-btn">🛒 購物車</button>
+        </div>
+    </nav>
+
+    <div class="container checkout-container">
+        <div class="form-card">
+            <h2 style="margin-bottom:25px; border-bottom:2px solid #ff9f43; padding-bottom:10px;">🚚 收件資訊</h2>
+            <div class="info-switch-container">
+                <div class="info-switch-item">
+                    <input type="radio" name="info-source" id="source-member" value="member" checked onclick="toggleInfoSource('member')">
+                    <label for="source-member">📋 使用常用資料</label>
+                </div>
+                <div class="info-switch-item">
+                    <input type="radio" name="info-source" id="source-manual" value="manual" onclick="toggleInfoSource('manual')">
+                    <label for="source-manual">✍️ 手動輸入資料</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>收件人姓名</label>
+                <input type="text" id="cust-name" placeholder="請輸入姓名">
+            </div>
+
+            <div class="form-group">
+                <label>連絡電話 (台灣手機格式)</label>
+                <input type="text" id="cust-phone" placeholder="例如: 0912345678">
+            </div>
+
+            <div class="form-group">
+                <label>配送地址</label>
+                <div class="address-grid">
+                    <select id="city-select" onchange="updateDistricts()">
+                        <option value="">請選擇縣市</option>
+                    </select>
+                    <select id="district-select" onchange="updateZipCode()">
+                        <option value="">區域</option>
+                    </select>
+                    <input type="text" id="zip-code" placeholder="郵遞區號" readonly style="background:#f9f9f9; text-align:center;">
+                </div>
+                <input type="text" id="cust-address-detail" placeholder="請輸入路名、門牌、樓層" style="margin-top:10px;">
+            </div>
+
+            <h2 style="margin:40px 0 25px; border-bottom:2px solid #ff9f43; padding-bottom:10px;">💳 付款方式</h2>
+            <div class="form-group">
+                <select id="payment-method" onchange="togglePaymentFields()">
+                    <option value="貨到付款">貨到付款 (主子簽收)</option>
+                    <option value="信用卡">信用卡 / 簽帳金融卡</option>
+                    <option value="銀行轉帳">銀行轉帳 (需提供後五碼)</option>
+                </select>
+            </div>
+            <div id="credit-card-info" style="display:none; background: #fff5eb; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                <div class="form-group">
+                    <label>信用卡號</label>
+                    <input type="text" id="card-number" placeholder="1234 5678 1234 5678" maxlength="16">
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <div class="form-group" style="flex:1;">
+                        <label>有效日期</label>
+                        <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>安全碼</label>
+                        <input type="text" id="card-cvv" placeholder="CVV" maxlength="3">
+                    </div>
+                </div>
+            </div>
+            <div id="bank-transfer-info" style="display:none; background: #fff5eb; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">
+                    請轉帳至：中華郵政 (700) 12345-67890<br>
+                    轉帳後請填寫您的帳號後五碼：
+                </p>
+                <div class="form-group">
+                    <label>帳號後五碼</label>
+                    <input type="text" id="bank-last-five" placeholder="例如: 12345" maxlength="5">
+                </div>
+            </div>
+            <h2 style="margin:40px 0 25px; border-bottom:2px solid #ff9f43; padding-bottom:10px;">🧾 發票資訊</h2>
+            <div class="form-group">
+                <select id="invoice-type" onchange="toggleInvoiceFields()">
+                    <option value="個人電子發票">紙本發票 </option>
+                    <option value="手機載具">手機條碼載具 (輸入載具號碼)</option>
+                    <option value="公司三聯式">公司三聯式 (需開立統編)</option>
+                    <option value="捐贈發票">捐贈發票 (把愛傳出去 🐾)</option>
+                </select>
+            </div>
+            <div id="invoice-company-info" style="display:none; background: #f0f0f0; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                <div class="form-group">
+                    <label>統一編號 (8位數字)</label>
+                    <input type="text" id="invoice-tax-id" placeholder="例如: 12345678" maxlength="8">
+                </div>
+                <div class="form-group">
+                    <label>公司抬頭</label>
+                    <input type="text" id="invoice-company-title" placeholder="請輸入公司完整名稱">
+                </div>
+            </div>
+
+            <div id="invoice-donation-info" style="display:none; background: #f0f0f0; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                <div class="form-group">
+                    <label>愛心碼</label>
+                    <input type="text" id="invoice-love-code" placeholder="請輸入愛心碼 (如: 888)" maxlength="7">
+                </div>
+                <p style="font-size: 0.8rem; color: #888;">喵選會幫妳將發票捐給「流浪貓保護協會」喔！❤️</p>
+            </div>
+
+            <div id="invoice-barcode-info" style="display:none; background: #f0f0f0; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                <div class="form-group">
+                    <label>手機條碼</label>
+                    <input type="text" id="invoice-mobile-barcode" placeholder="例如: /ABC1234" maxlength="8">
+                </div>
+                <p style="font-size: 0.8rem; color: #888;">請輸入包含 / 的 8 碼條碼喔！</p>
+            </div>
+
+            <button class="checkout-btn" style="margin-top:20px; font-size:1.1rem; height: 55px;" onclick="placeOrder()">確認下單，準備伺候主子</button>
+        </div>
+
+        <div class="summary-card">
+            <h3 style="margin-bottom:25px;">📋 訂單摘要</h3>
+            <div id="checkout-items-list"></div>
+            
+            <div class="order-total-section">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; color:#666;">
+                    <span>運費</span><span>$0 (免運活動中)</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:1.3rem; font-weight:bold; color:#ee5253;">
+                    <span>應付總額</span>
+                    <span id="checkout-total-display">$0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="../js/checkout.js"></script>
+    <script src="../js/chat.js"></script>
+    <div class="overlay" id="cartOverlay" hidden></div>
+
+    <aside class="cart-sidebar" id="cartSidebar" role="dialog" aria-modal="true" aria-labelledby="cartTitle" tabindex="-1" hidden>
+        <div class="cart-header">
+            <h3 id="cartTitle">購物袋</h3>
+            <button id="close-btn" type="button" class="icon-btn" aria-label="關閉購物車">&times;</button>
+        </div>
+
+        <div id="cart-items-list" class="cart-items" aria-live="polite"></div>
+
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>總計</span>
+                <span id="cart-total-display">$0</span>
+            </div>
+            <button class="checkout-btn" type="button" onclick="location.href='checkout.html'">
+                前往結帳
+            </button>
+        </div>
+    </aside>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>精選商品 | MEOW SELECT</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="cart-sidebar"> </div>
+    <nav>
+        <a href="index.html" class="logo">MEOW SELECT</a>
+        <div class="nav-links">
+            <a href="../index.html" >首頁</a>
+            <a href="about.html">品牌故事</a> 
+            <a href="shop.html" style="color:#ff9f43; font-weight:bold;">所有商品</a>
+            <a href="member.html">會員中心</a>
+            <button id="cart-btn">🛒 購物車</button>
+        </div>
+    </nav>
+    <!-- 購物車 HTML -->
+    <div class="overlay"></div>
+    <aside class="cart-sidebar">
+        <div class="cart-header">
+            <h3>妳的購物袋</h3>
+            <button id="close-btn" type="button" class="icon-btn">&times;</button>
+        </div>
+        <div id="cart-items-list" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>總計</span>
+                <span id="cart-total-display">$0</span>
+            </div>
+            <button class="checkout-btn" type="button" onclick="location.href='checkout.html'">前往結帳</button>
+        </div>
+    </aside>
+
+    <div class="container shop-layout">
+        <!-- 左側：年齡篩選 -->
+        <aside class="filter-sidebar">
+            <h4>🐾 依貓咪年齡選擇</h4>
+
+            <label>
+                <input type="radio" name="age" value="" checked>
+                全部
+            </label>
+
+            <label>
+                <input type="radio" name="age" value="kitten">
+                幼貓
+            </label>
+
+            <label>
+                <input type="radio" name="age" value="adult">
+                成貓
+            </label>
+
+            <label>
+                <input type="radio" name="age" value="senior">
+                熟齡貓
+            </label>
+        </aside>
+
+        <!-- 右側：商品 -->
+        <div class="product-grid" id="shop-product-grid"></div>
+
+    </div>
+
+
+    <script src="../js/product.js"></script>
+    <script src="../js/cart.js"></script>
+    <script>
+let currentAgeFilter = null;
+
+function renderShop() {
+  const grid = document.getElementById('shop-product-grid');
+  if (!grid) return;
+
+  grid.innerHTML = '';
+  const data = window.products;
+  if (!data) {
+    console.error("❌ products 不存在");
+    return;
+  }
+
+  Object.entries(data)
+    .filter(([id, p]) => {
+      if (!currentAgeFilter) return true;
+
+      // 防呆：p.age 可能是陣列或字串
+      if (Array.isArray(p.age)) return p.age.includes(currentAgeFilter);
+      if (typeof p.age === "string") return p.age === currentAgeFilter;
+      return false;
+    })
+    .forEach(([id, p]) => {
+      let priceText = "";
+      if (p.variants && p.variants.length > 0) {
+        const minPrice = Math.min(...p.variants.map(v => v.price));
+        priceText = `$${minPrice} 起`;
+      } else if (p.price) {
+        priceText = `$${p.price}`;
+      } else if (p.defaultPrice) {
+        priceText = `$${p.defaultPrice}`;
+      }
+
+      grid.innerHTML += `
+        <div class="product-card">
+          <img src="${p.img}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p class="price">${priceText}</p>
+          <a href="product-detail.html?id=${id}">查看詳情</a>
+        </div>
+      `;
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // ✅ 1) 先讀首頁傳來的參數
+  const params = new URLSearchParams(location.search);
+  const age = params.get("age"); // kitten / adult / senior
+
+  if (["kitten", "adult", "senior"].includes(age)) {
+    currentAgeFilter = age;
+
+    // ✅ 2) 自動勾選對應 radio
+    const targetRadio = document.querySelector(`input[name="age"][value="${age}"]`);
+    if (targetRadio) targetRadio.checked = true;
+  } else {
+    currentAgeFilter = null;
+    const allRadio = document.querySelector(`input[name="age"][value=""]`);
+    if (allRadio) allRadio.checked = true;
+  }
+
+  // ✅ 3) 初次渲染（此時會套用 URL 篩選）
+  renderShop();
+
+  // ✅ 4) 監聽 radio 切換
+  document.querySelectorAll('input[name="age"]').forEach(radio => {
+    radio.addEventListener('change', function () {
+      currentAgeFilter = this.value || null;
+      renderShop();
+    });
+  });
+});
+</script>
+
+        
+    <script src="../js/chat.js"></script>
+</body>
+</html>

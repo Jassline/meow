@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加入喵窩 - 會員註冊</title>
+    <link rel="stylesheet" href="../css/member.css">
+    
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-text">
+            <h1>加入喵窩</h1>
+            <p>Create Your Account</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="auth-card">
+            <h2 class="section-title">新會員註冊 Register</h2>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label><span class="required">*</span>電子郵件 (帳號)</label>
+                    <input type="email" id="regEmail" placeholder="example@mail.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label><span class="required">*</span>設定密碼</label>
+                    <input type="password" id="regPassword" placeholder="至少 6 位字元" required>
+                </div>
+
+                <div class="form-group">
+                    <label><span class="required">*</span>確認密碼</label>
+                    <input type="password" id="confirmPassword" placeholder="請再次輸入密碼" required>
+                </div>
+
+                <div class="divider"><span>基本資料</span></div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>您的稱呼</label>
+                        <input type="text" id="regOwnerName" placeholder="怎麼稱呼您？">
+                    </div>
+                    <div class="form-group">
+                        <label>主子名稱</label>
+                        <input type="text" id="regCatName" placeholder="貓咪的名字">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><span class="required">*</span>聯絡電話 (格式: 09XXXXXXXX)</label>
+                    <input type="tel" id="regPhone" placeholder="0912345678" 
+                           pattern="^09\d{8}$" 
+                           title="請輸入正確的 09 開頭 10 位數字格式" required>
+                </div>
+
+                <button type="submit" class="btn-dark-login">完成註冊，開始養貓！</button>
+            </form>
+
+            <div class="auth-footer">
+                <a href="member.html">已經有帳號了？ 點我登入</a>
+            </div>
+        </section>
+    </div>
+
+    <aside class="cart-sidebar" id="cartSidebar" role="dialog" aria-modal="true" aria-labelledby="cartTitle" tabindex="-1" hidden>
+        <div class="cart-header">
+            <h3 id="cartTitle">妳的購物袋</h3>
+            <button id="close-btn" type="button" class="icon-btn" aria-label="關閉購物車">&times;</button>
+        </div>
+        <div id="cart-items-list" class="cart-items" aria-live="polite"></div>
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>總計</span>
+                <span id="cart-total-display">$0</span>
+            </div>
+            <button class="checkout-btn" type="button" onclick="location.href='checkout.html'">前往結帳</button>
+        </div>
+    </aside>
+    
+    <script src="../js/member.js"></script>
+    
+</body>
+</html>

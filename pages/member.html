@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>會員中心 | MEOW SELECT</title>
+    <link rel="stylesheet" href="../css/member.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="cart-sidebar"></div>  
+    <nav>
+        <a href="index.html" class="logo">MEOW SELECT</a>
+        <div class="nav-links">
+            <a href="../index.html">首頁</a>
+            <a href="about.html">品牌故事</a> 
+            <a href="shop.html">所有商品</a>
+            <a href="member.html" style="color:#ff9f43; font-weight:bold;">會員中心</a>
+            <button id="cart-btn">🛒 購物車</button>
+        </div>
+    </nav>
+
+    <header class="main-header">
+        <div class="melt-container">
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path class="melt-path" d="M0,0 L1440,0 L1440,150 
+                        C1380,280 1320,80 1260,200 
+                        C1200,320 1140,150 1080,260 
+                        C1020,370 960,180 900,220 
+                        C840,260 780,350 720,280 
+                        C660,210 600,100 540,240 
+                        C480,380 420,150 360,190 
+                        C300,230 240,310 180,250 
+                        C120,190 60,340 0,150 Z">
+                </path>
+            </svg>
+        </div>
+    </header>
+
+    <aside class="cart-sidebar">
+        <div class="cart-header">
+            <h3>購物袋</h3>
+            <button id="close-btn" type="button" class="icon-btn">&times;</button>
+        </div>
+        <div id="cart-items-list" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>總計</span>
+                <span id="cart-total-display">$0</span>
+            </div>
+            <button class="checkout-btn" type="button" onclick="location.href='checkout.html'">前往結帳</button>
+        </div>
+    </aside>
+
+    <div class="header-text">
+            <h1>會員中心 🐾</h1>
+    </div>
+
+    <div class="container">
+        <section class="auth-card">
+            <form id="loginForm">
+                <div class="form-group">
+                    <label><span class="required">*</span>帳號</label>
+                    <input type="email" id="loginEmail" placeholder="e-mail" required>
+                </div>
+                <div class="form-group">
+                    <label><span class="required">*</span>密碼</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn-dark-login">登入 <span class="arrow">→</span></button>
+            </form>
+            <div class="auth-footer">
+                <a href="forgot-password.html">忘記密碼？</a>
+                <a href="register.html">還不是會員？ 點我註冊</a>
+            </div>
+        </section>
+
+        <section class="info-section" style="display: none;">
+            <h2 class="section-title">個人資料編輯 Profile</h2>
+            <form id="profileForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>您的稱呼 Owner Name</label>
+                        <input type="text" id="ownerName">
+                    </div>
+                    <div class="form-group">
+                        <label>主子名稱 Cat's Name</label>
+                        <input type="text" id="catName" placeholder="例：小虎">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>聯絡電話 Phone Number</label>
+                    <input type="text" id="phoneNum" placeholder="09XX-XXX-XXX">
+                </div>
+                
+                <button type="submit" class="btn-dark-small">儲存變更 (Save Changes)</button>
+                
+                <a href="member-history.html" class="btn-dark-small" style="display: block; text-align: center; text-decoration: none; background-color: #503824; margin-top: 15px;">
+                    查看歷史訂單紀錄 (Order History)
+                </a>
+        
+                <button type="button" id="logoutBtn" class="btn-dark-small" style="background-color: #888; margin-top: 10px; width: 100%;">登出帳號 (Logout)</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="../js/member.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/chat.js"></script>
+</body>
+</html>

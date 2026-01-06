@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>商品詳情 | MEOW SELECT</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <a href="../index.html" class="logo">MEOW SELECT</a>
+        <div class="nav-links">
+            <a href="../index.html">首頁</a>
+            <a href="about.html">品牌故事</a>
+            <a href="shop.html" style="color:#ff9f43; font-weight:bold;">所有商品</a>
+            <a href="member.html">會員中心</a>
+            <button id="cart-btn">🛒 購物車</button>
+        </div>
+    </nav>
+
+    <div class="overlay"></div>
+
+    <div class="product-main-container">
+        <a href="javascript:history.back()" class="back-btn">← 返回上一頁</a>
+
+        <div class="product-detail-flex">
+            <img src="" id="p-img" class="product-img">
+
+            <div class="product-info-box">
+                <h1 id="p-name">載入中...</h1>
+                <p class="price" id="p-price" style="font-size:28px;"></p>
+
+                <div class="suitability-box">
+                    <p style="font-weight:bold; margin-bottom:10px;">🐾 貓貓適配度建議</p>
+                    <div>幼貓 (0-12M) <span id="s-kitten" class="suit-stars"></span></div>
+                    <div>成貓 (1-7Y) <span id="s-adult" class="suit-stars"></span></div>
+                    <div>熟齡 (7Y+) <span id="s-senior" class="suit-stars"></span></div>
+                </div>
+
+                <p id="p-desc" style="color:#666; margin-bottom:20px;"></p>
+
+                <div class="flavor-btns" id="option-area" style="display:none;">
+                    <p id="option-title" style="margin-bottom:10px; font-weight:bold;"></p>
+                    <div id="option-buttons"></div>
+                </div>
+
+                <div style="margin:20px 0;">
+                    數量：
+                    <input type="number" id="p-qty" value="1" min="1" style="width:50px; padding:5px;">
+                </div>
+
+                <button class="btn-add" onclick="addToCart()">加入購物車</button>
+            </div>
+        </div>
+
+        <div class="review-section">
+            <h3 style="color:#ff9f43; margin-bottom:15px;">產品成分</h3>
+            <div
+                id="p-full-detail"
+                style="background:#f9f9f9; padding:20px; border-radius:10px; line-height:1.8; color:#555;">
+            </div>
+    </div>
+    
+    <div class="review-section" onclick="event.stopPropagation()">
+    <h3 style="margin-bottom:15px;">🐱 留下妳的商品評價</h3>
+
+    <div class="star-rating">
+    <span class="star" data-value="1">★</span>
+    <span class="star" data-value="2">★</span>
+    <span class="star" data-value="3">★</span>
+    <span class="star" data-value="4">★</span>
+    <span class="star" data-value="5">★</span>
+    </div>
+
+    <input
+    id="review-name"
+    class="review-name"
+    placeholder="暱稱（可留空）"
+    />
+
+    <textarea
+        id="review-text"
+        placeholder="寫下妳的心得…"
+        class="review-text"
+    ></textarea>
+
+    <button id="submit-review">送出評價</button>
+
+    <p
+    style="
+        margin-top:10px;
+        font-size:13.5px;
+        color:#a66a2f;
+        line-height:1.6;
+        background:#fff6eb;
+        padding:8px 12px;
+        border-radius:12px;
+        display:inline-block;
+    "
+    >
+    🐱 小提醒：評價不能刪掉喔～<br>
+    但重新送出可以幫它換新衣✨
+    </p>
+    <div id="review-summary" style="margin-top:30px;"></div>
+
+
+    <h4 class="review-title">💬 其他貓奴怎麼說</h4>
+    <div id="review-list"></div>
+    </div>
+
+        <script src="../js/product.js"></script>
+        <script src="../js/cart.js"></script>
+
+        <script>
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    if (currentUser && currentUser.username) {
+        const nameInput = document.getElementById('review-name');
+        if (nameInput) {
+            nameInput.value = currentUser.username;
+            nameInput.disabled = true; 
+            nameInput.style.background = "#f7f7f7";
+        }
+    }
+
+
+    /* 基本資料*/
+    const products = window.products;;
+    const productId = new URLSearchParams(window.location.search).get('id');
+    let selectedRating = 0;
+    let selectedFlavor = "";
+    let selectedPack = "";
+    let currentVariant = null;
+    let p = null;
+    let reviewerKey = localStorage.getItem("reviewerKey");
+    if (!reviewerKey) {
+        reviewerKey = crypto.randomUUID();
+        localStorage.setItem("reviewerKey", reviewerKey);
+    }
+    /* ========= 載入商品 ========= */
+    if (productId && products && products[productId]) {
+        p = products[productId];
+
+        document.getElementById('p-name').innerText = p.name;
+        document.getElementById('p-desc').innerHTML = p.desc || "";
+        document.getElementById('p-img').src = p.img;
+        document.getElementById('p-full-detail').innerHTML =
+            p.fullDetail || "暫無詳細成分資訊";
+
+        renderSuitability(p);
+        renderOptions(p);
+        renderReviews();
+    } else {
+        alert("找不到商品資料");
+    }
+
+    /* 規格選擇*/
+    function renderOptions(p) {
+        if (!p.variants || !Array.isArray(p.variants)) {
+            document.getElementById('p-price').innerText =
+                "$" + (p.price || p.defaultPrice || 0);
+            return;
+        }
+
+
+
+        const hasFlavor = p.variants[0].flavor !== undefined;
+        const hasPack = p.variants[0].pack !== undefined;
+        const hasWeight = p.variants[0].weight !== undefined;
+
+        document.getElementById('option-area').style.display = 'block';
+        document.getElementById('option-buttons').innerHTML = '';
+        renderReviews();
+
+        /* 口味 + 包裝 */
+        if (hasFlavor && hasPack) {
+            document.getElementById('option-title').innerText = "選擇規格";
+
+            const flavorArea = document.createElement('div');
+            flavorArea.id = "flavor-buttons";
+            document.getElementById('option-buttons').appendChild(flavorArea);
+
+            const flavors = [...new Set(p.variants.map(v => v.flavor))];
+            selectedFlavor = flavors[0];
+
+            flavors.forEach((flavor, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "flavor-btn" + (idx === 0 ? " active" : "");
+                btn.innerText = flavor;
+                btn.onclick = () => {
+                    document.querySelectorAll('#flavor-buttons .flavor-btn')
+                        .forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedFlavor = flavor;
+                    renderPackButtons();
+                };
+                flavorArea.appendChild(btn);
+            });
+
+            function renderPackButtons() {
+                let packArea = document.getElementById('pack-buttons');
+                if (!packArea) {
+                    packArea = document.createElement('div');
+                    packArea.id = 'pack-buttons';
+                    document.getElementById('option-buttons').appendChild(packArea);
+                }
+                packArea.innerHTML = '';
+
+                const filtered = p.variants.filter(v => v.flavor === selectedFlavor);
+                currentVariant = filtered[0];
+
+                filtered.forEach((variant, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = "flavor-btn" + (idx === 0 ? " active" : "");
+                    btn.innerText = variant.pack;
+                    btn.onclick = () => {
+                        packArea.querySelectorAll('.flavor-btn')
+                            .forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        currentVariant = variant;
+                        document.getElementById('p-price').innerText = "$" + variant.price;
+                    };
+                    packArea.appendChild(btn);
+                });
+
+                document.getElementById('p-price').innerText =
+                    "$" + currentVariant.price;
+            }
+
+            renderPackButtons();
+        }
+
+        /* 重量型 */
+        else if (hasWeight) {
+            document.getElementById('option-title').innerText = "選擇規格";
+            p.variants.forEach((variant, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "flavor-btn" + (idx === 0 ? " active" : "");
+                btn.innerText = variant.weight;
+                btn.onclick = () => {
+                    document.querySelectorAll('.flavor-btn')
+                        .forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentVariant = variant;
+                    document.getElementById('p-price').innerText = "$" + variant.price;
+                };
+                document.getElementById('option-buttons').appendChild(btn);
+            });
+
+            currentVariant = p.variants[0];
+            document.getElementById('p-price').innerText =
+                "$" + currentVariant.price;
+        }
+    }
+
+    /* 適配度*/
+    function renderSuitability(p) {
+        const stars = n => "★".repeat(n) + "☆".repeat(5 - n);
+        document.getElementById('s-kitten').innerText = stars(p.suitKitten || 0);
+        document.getElementById('s-adult').innerText = stars(p.suitAdult || 0);
+        document.getElementById('s-senior').innerText = stars(p.suitSenior || 0);
+    }
+
+    /*  加入購物車*/
+    function addToCart() {
+        if (!p) return;
+
+        const qty = parseInt(document.getElementById('p-qty').value);
+        const variant = currentVariant || p;
+
+        let name = p.name;
+        if (variant.flavor) name += ` - ${variant.flavor}`;
+        if (variant.pack) name += ` - ${variant.pack}`;
+        if (variant.weight) name += ` - ${variant.weight}`;
+
+        const price = variant.price || p.price || p.defaultPrice;
+
+        localStorage.setItem("lastProductId", productId);
+
+        const cart = JSON.parse(localStorage.getItem('myCart')) || [];
+        cart.push({
+            id: productId,
+            name,
+            price,
+            img: p.img,
+            qty
+        });
+
+        localStorage.setItem('myCart', JSON.stringify(cart));
+        alert("已加入購物車 🐾");
+    }
+
+
+    /* 評價顯示 */
+    function renderReviews() {
+        const reviewList = document.getElementById('review-list');
+        const summary = document.getElementById('review-summary');
+        if (!reviewList || !summary) return;
+
+        const reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+        const list = reviews.filter(r => r.productId === productId);
+
+        if (list.length === 0) {
+            summary.innerHTML = "";
+            reviewList.innerHTML = "<p style='color:#999;'>尚無評價</p>";
+            return;
+        }
+
+        const avg = list.reduce((sum, r) => sum + r.rating, 0) / list.length;
+
+        summary.innerHTML = `
+            <strong>${avg.toFixed(1)}</strong>
+            <span style="color:#ff9f43;">
+                ${"★".repeat(Math.round(avg))}
+            </span>
+            <span style="color:#999;">
+                （${list.length} 則評價）
+            </span>
+        `;
+
+        reviewList.innerHTML = list
+            .map(r => `
+                <div class="review-item" style="border-bottom:1px solid #eee;padding:12px 0;">
+                    <strong>🐾 ${r.username || "匿名貓奴"}</strong>
+                    <div style="color:#ff9f43;">
+                        ${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}
+                    </div>
+                    <p>${r.text}</p>
+                    <small style="color:#aaa;">${r.time}</small>
+                </div>
+            `)
+            .join("");
+    }
+
+    /* 初始化 */
+    document.addEventListener("DOMContentLoaded", () => {
+
+        /* ⭐ 星星點擊 */
+        document.addEventListener(
+            "click",
+            (e) => {
+                const star = e.target.closest(".star");
+                if (!star) return;
+
+                e.stopPropagation();
+                selectedRating = Number(star.dataset.value);
+
+                document.querySelectorAll(".star").forEach(s => {
+                    s.classList.toggle(
+                        "active",
+                        Number(s.dataset.value) <= selectedRating
+                    );
+                });
+            },
+            true
+        );
+
+        /* 送出評論 */
+        document.getElementById("submit-review")
+            ?.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const text = document.getElementById("review-text").value.trim();
+                const nameInput = document.getElementById("review-name")?.value.trim();
+
+                const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+                const username =
+                    nameInput ||
+                    (currentUser && currentUser.username) ||
+                    "匿名貓奴";
+
+                if (selectedRating === 0) return alert("請選擇星等");
+                if (!text) return alert("請輸入評論內容");
+
+                let reviewerKey = localStorage.getItem("reviewerKey");
+                if (!reviewerKey) {
+                    reviewerKey = crypto.randomUUID();
+                    localStorage.setItem("reviewerKey", reviewerKey);
+                }
+
+                const reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+
+                const existingIndex = reviews.findIndex(r =>
+                    r.productId === productId &&
+                    r.reviewerKey === reviewerKey
+                );
+
+                if (existingIndex !== -1) {
+                    reviews[existingIndex] = {
+                        ...reviews[existingIndex],
+                        rating: selectedRating,
+                        text,
+                        username,
+                        time: new Date().toLocaleString()
+                    };
+                } else {
+                    reviews.push({
+                        productId,
+                        reviewerKey,
+                        username,
+                        rating: selectedRating,
+                        text,
+                        time: new Date().toLocaleString()
+                    });
+                }
+
+                localStorage.setItem("reviews", JSON.stringify(reviews));
+
+                document.getElementById("review-text").value = "";
+                selectedRating = 0;
+                document.querySelectorAll(".star").forEach(s => s.classList.remove("active"));
+
+                renderReviews();
+            });
+    });
+    </script>
+    <aside class="cart-sidebar" id="cartSidebar" role="dialog" aria-modal="true" aria-labelledby="cartTitle" tabindex="-1" hidden>
+        <div class="cart-header">
+            <h3 id="cartTitle">購物袋</h3>
+            <button id="close-btn" type="button" class="icon-btn" aria-label="關閉購物車">&times;</button>
+        </div>
+
+        <div id="cart-items-list" class="cart-items" aria-live="polite"></div>
+
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>總計</span>
+                <span id="cart-total-display">$0</span>
+            </div>
+            <button class="checkout-btn" type="button" onclick="location.href='checkout.html'">
+                前往結帳
+            </button>
+        </div>
+    </aside>
+    <script src="../js/chat.js"></script>
+</body>
+</html>
