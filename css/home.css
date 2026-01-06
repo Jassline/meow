@@ -1,0 +1,796 @@
+/* =========================
+   HOME ONLY THEME (index.html)
+   只作用在 body.home
+========================= */
+
+body.home{
+  --cream: #fbf3e6;
+  --sand:  #f6e6d3;
+  --peach: #f3c6a7;
+  --brown: #4b3a2f;
+  --ink:   #2b2b2b;
+  --line:  rgba(75,58,47,.18);
+  --shadow: 0 18px 40px rgba(0,0,0,.08);
+
+  background:
+    /* 背景淡格紋 */
+    linear-gradient(90deg, rgba(255,255,255,.65) 1px, transparent 1px) 0 0/56px 56px,
+    linear-gradient(rgba(255,255,255,.65) 1px, transparent 1px) 0 0/56px 56px,
+    radial-gradient(circle at 15% 12%, rgba(243,198,167,.35), transparent 40%),
+    radial-gradient(circle at 80% 18%, rgba(216,234,246,.55), transparent 38%),
+    var(--cream);
+  color: var(--ink);
+}
+
+/* 讓首頁 container 稍微像參考圖：留白漂亮 */
+body.home .container{
+  max-width: 1100px;
+}
+
+
+body.home nav{
+  background: rgba(251,243,230,.9);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+}
+body.home nav .logo{
+  letter-spacing: .5px;
+  font-weight: 800;
+  color: #ff8b2c; /* 橘色品牌感 */
+}
+
+/* HERO：左卡片 + 右圓形貓圖 + 貼紙塗鴉*/
+body.home .hero{
+  padding: 42px 18px 54px;
+}
+
+body.home .hero-wrap{
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 28px;
+  align-items: center;
+  position: relative;
+}
+
+/* 左側文字卡片（像參考圖那個框） */
+body.home .hero-card{
+  background: rgba(255,255,255,.6);
+  border: 1.5px solid var(--line);
+  border-radius: 22px;
+  padding: 28px 26px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+/* 貼紙感的小星星/爪印 */
+body.home .hero-card::before{
+  content:"★";
+  position:absolute;
+  top:-12px; left:18px;
+  background: #fff;
+  border: 1px solid var(--line);
+  width: 34px; height: 34px;
+  display:grid; place-items:center;
+  border-radius: 12px;
+  transform: rotate(-8deg);
+}
+body.home .hero-card::after{
+  content:"🐾";
+  position:absolute;
+  bottom:-14px; right:18px;
+  background: #fff;
+  border: 1px solid var(--line);
+  width: 44px; height: 44px;
+  display:grid; place-items:center;
+  border-radius: 14px;
+  transform: rotate(10deg);
+}
+
+/* 偏左更像參考圖 */
+body.home .hero h1{
+  margin: 0 0 10px;
+  font-size: clamp(28px, 3.2vw, 44px);
+  letter-spacing: 1px;
+  text-align: left;
+  color: #2d2d2d;
+}
+body.home .hero p{
+  margin: 0 0 16px;
+  text-align: left;
+  color: rgba(43,43,43,.72);
+}
+
+/* Hero buttons */
+body.home .hero-actions{
+  display:flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+body.home .btn{
+  display:inline-block;
+  padding: 12px 16px;
+  border-radius: 999px;
+  text-decoration:none;
+  font-weight: 800;
+  border: 1px solid var(--line);
+}
+body.home .btn.primary{
+  background:#111;
+  color:#fff;
+  border-color: transparent;
+}
+body.home .btn.ghost{
+  background: rgba(255,255,255,.6);
+  color:#111;
+}
+
+/* badges */
+body.home .hero-badges{
+  display:flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  color: rgba(43,43,43,.7);
+  font-size: 14px;
+}
+body.home .hero-badges span{
+  background: rgba(255,255,255,.55);
+  border: 1px solid var(--line);
+  padding: 8px 12px;
+  border-radius: 999px;
+}
+
+/* 右側圓形貓圖 */
+body.home .hero-visual{
+  width: min(420px, 88%);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255,255,255,.35), transparent 55%),
+    url("../img/hero-cat.png") no-repeat;
+    background-size: cover;
+    background-position: center 100%;
+  border: 10px solid rgba(255,255,255,.55);
+  outline: 2px solid var(--line);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+/* 圓形旁邊的小塗鴉 */
+body.home .hero-visual::before{
+  content:"";
+  position:absolute;
+  inset:-18px;
+  border-radius: 999px;
+  border: 2px dashed rgba(243,198,167,.85);
+  transform: rotate(-6deg);
+}
+body.home .hero-visual::after{
+  content:"";
+  position:absolute;
+  right:-20px; top: 14%;
+  width: 54px; height: 54px;
+  border-radius: 16px;
+  background: rgba(216,234,246,.8);
+  border: 1px solid var(--line);
+  transform: rotate(12deg);
+}
+
+/* 本週精選：輪播外框變成「卡片框」感*/
+body.home .home-block{
+  padding-top: 0;
+}
+body.home .block-title{
+  letter-spacing: .6px;
+  color: #2d2d2d;
+}
+body.home .promo-carousel{
+  background: rgba(255,255,255,.55);
+  border: 1.5px solid var(--line);
+  border-radius: 22px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+/* 讓 slide 看起來像參考圖那種「一張大卡」 */
+body.home .promo-slide{
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(75,58,47,.14);
+  background: rgba(255,255,255,.65);
+}
+
+/* promo 文字更可愛一點 */
+body.home .promo-tag{
+  display:inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(243,198,167,.55);
+  border: 1px solid rgba(75,58,47,.12);
+  font-weight: 800;
+}
+body.home .promo-title{ letter-spacing: .6px; }
+body.home .promo-cta{ font-weight: 900; }
+body.home .promo-dots .dot{
+  width: 10px; height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(75,58,47,.25);
+  background: rgba(255,255,255,.8);
+}
+body.home .promo-dots .dot.is-active{
+  background: rgba(255,139,44,.9);
+  border-color: transparent;
+}
+
+/* 依年齡挑選做成參考圖那種「分類方塊」*/
+body.home .block-sub{
+  color: rgba(43,43,43,.7);
+}
+
+body.home .age-grid{
+  margin-top: 18px;
+  gap: 16px;
+}
+
+body.home .age-card{
+  background: rgba(255,255,255,.6);
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  padding: 18px 18px;
+  box-shadow: 0 12px 24px rgba(0,0,0,.06);
+  position: relative;
+  overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+body.home .age-card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 18px 34px rgba(0,0,0,.10);
+}
+
+/* 每張卡的角落裝飾 */
+body.home .age-card::before{
+  content:"";
+  position:absolute;
+  left:-16px; top:-16px;
+  width: 70px; height: 70px;
+  border-radius: 22px;
+  background: rgba(243,198,167,.45);
+  transform: rotate(18deg);
+}
+body.home .age-card::after{
+  content:"";
+  position:absolute;
+  right:-18px; bottom:-18px;
+  width: 90px; height: 90px;
+  border-radius: 28px;
+  background: rgba(216,234,246,.55);
+  transform: rotate(-12deg);
+}
+
+body.home .age-emoji{
+  font-size: 28px;
+  width: 46px; height: 46px;
+  display:grid; place-items:center;
+  border-radius: 14px;
+  background: rgba(255,255,255,.75);
+  border: 1px solid rgba(75,58,47,.12);
+  position: relative;
+  z-index: 1;
+}
+body.home .age-card h3,
+body.home .age-card p,
+body.home .age-link{
+  position: relative;
+  z-index: 1;
+}
+
+body.home .age-link{
+  display:inline-block;
+  margin-top: 10px;
+  font-weight: 900;
+  color: #ff8b2c;
+}
+
+/* RWD：手機一欄，hero 圖移到下面*/
+@media (max-width: 860px){
+  body.home .hero-wrap{
+    grid-template-columns: 1fr;
+  }
+  body.home .hero-visual{
+    width: min(380px, 92%);
+  }
+}
+/* ===== Hero 高度/留白微調（覆蓋） ===== */
+/* 整個 hero 上下不要那麼厚 */
+body.home .hero{
+  padding: 28px 18px 32px; 
+}
+body.home .hero-wrap{
+  gap: 22px;
+  align-items: center;
+  min-height: 360px;         
+}
+/* 左卡片不要太胖，內容更緊湊 */
+body.home .hero-card{
+  padding: 22px 22px;
+}
+/* 右邊圓形：稍微縮小，避免把 hero 撐太高 */
+body.home .hero-visual{
+  width: min(360px, 86%);
+}
+/* Hero 標題稍微收一點行高，整體更緊 */
+body.home .hero h1{
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+body.home .hero p{
+  margin-bottom: 10px;
+}
+
+/* badges 不要佔太多高度 */
+body.home .hero-badges span{
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+/*  Hero 跟下一段「本週精選」加空隙  */
+body.home .home-block{
+  margin-top: 18px;         
+}
+body.home .hero{
+  background: rgba(255,255,255,.15);
+  border-bottom: 1px solid rgba(75,58,47,.12);
+}
+/* 右側圓形不要裁到：限制高度 + 缩小外圈 */
+
+body.home .hero-wrap{
+  align-items: center;
+  /* 讓右圖有足夠空間，不會被切 */
+  min-height: 420px;
+}
+
+/* 圓形用高度上限控制，而不是只靠 width */
+body.home .hero-visual{
+  width: auto !important;
+  height: 340px;                
+  max-height: 340px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+/* 虛線外圈不要太外擴，避免超出 */
+body.home .hero-visual::before{
+  inset: -10px; 
+}
+
+body.home .hero-visual::after{
+  width: 44px;
+  height: 44px;
+  right: -14px;
+}
+body.home .hero-wrap{ min-height: min(460px, 60vh); }
+
+/* 1) 任何父層都不要裁切 */
+body.home .hero,
+body.home .hero-wrap{
+  overflow: visible !important;
+}
+
+/* 2) 給 hero 一點點上方空間（避免被導覽列蓋住） */
+body.home .hero{
+  padding-top: 34px;  
+}
+
+/* 3) 圓形往下移 + 略縮小 */
+body.home .hero-visual{
+  height: 300px;      
+  max-height: 300px;
+  width: auto !important;
+  aspect-ratio: 1/1;
+  margin-top: 12px;    /* 往下 */
+}
+
+/* 4) 外圈不要太外擴（外圈最容易被裁） */
+body.home .hero-visual::before{
+  inset: -6px !important;  
+}
+body.home .hero-visual{
+  margin-top: 24px; 
+}
+
+body.home .section-head{
+  display:flex; align-items:end; justify-content:space-between;
+  margin: 10px 0 14px;
+}
+body.home .section-head h2{ margin:0; }
+body.home .mini-link{ font-weight:800; color:#ff8b2c; text-decoration:none; }
+
+/* ===== A. 品牌跑馬燈 ===== */
+body.home .brand-strip{ padding: 10px 0 18px; }
+body.home .brand-track{
+  display:flex; gap: 26px;
+  padding: 14px 18px;
+  border: 1.5px solid rgba(75,58,47,.16);
+  border-radius: 18px;
+  background: rgba(255,255,255,.55);
+  overflow: hidden;
+  white-space: nowrap;
+}
+body.home .brand-track span{
+  font-weight: 900;
+  opacity:.55;
+  letter-spacing: .6px;
+}
+
+/* ===== B. 公告+會員 ===== */
+body.home .notice-area{ padding: 10px 0 28px; }
+body.home .notice-grid{
+  display:grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 16px;
+}
+body.home .notice-card,
+body.home .member-card{
+  background: rgba(255,255,255,.6);
+  border: 1.5px solid rgba(75,58,47,.16);
+  border-radius: 18px;
+  box-shadow: 0 14px 28px rgba(0,0,0,.06);
+  padding: 16px 18px;
+}
+body.home .notice-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+body.home .notice-list{ margin:0; padding-left: 18px; color: rgba(43,43,43,.78); }
+body.home .notice-list .date{ font-weight:900; margin-right:10px; color: rgba(43,43,43,.9); }
+body.home .member-card p{ color: rgba(43,43,43,.75); margin-top: 6px; }
+body.home .mini-actions{ display:flex; gap: 12px; margin-top: 10px; }
+body.home .mini-actions a{ color: rgba(43,43,43,.7); font-weight:800; text-decoration:none; }
+
+/* ===== C. 排行榜 ===== */
+body.home .ranking{ padding: 8px 0 30px; }
+body.home .rank-grid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+body.home .rank-card{
+  position:relative;
+  display:block;
+  text-decoration:none;
+  color: inherit;
+  background: rgba(255,255,255,.62);
+  border: 1.5px solid rgba(75,58,47,.16);
+  border-radius: 18px;
+  overflow:hidden;
+  padding: 12px;
+  box-shadow: 0 12px 24px rgba(0,0,0,.06);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+body.home .rank-card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 18px 34px rgba(0,0,0,.10);
+}
+body.home .rank-badge{
+  position:absolute; top:10px; left:10px;
+  width: 34px; height: 34px;
+  border-radius: 999px;
+  display:grid; place-items:center;
+  background: rgba(255,139,44,.9);
+  color:#fff; font-weight:900;
+}
+body.home .rank-img{
+  height: 140px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(243,198,167,.55), rgba(216,234,246,.55));
+  border: 1px solid rgba(75,58,47,.10);
+  margin-bottom: 10px;
+}
+body.home .rank-info h4{ margin: 0 0 4px; }
+body.home .rank-info p{ margin:0; opacity:.75; font-weight:900; }
+
+/* ===== D + E. 好評 + 快速入口 ===== */
+body.home .trust-area{ padding: 4px 0 44px; }
+body.home .trust-grid{
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 16px;
+}
+body.home .review-cards{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+body.home .review-card{
+  background: rgba(255,255,255,.62);
+  border: 1.5px solid rgba(75,58,47,.16);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 12px 24px rgba(0,0,0,.06);
+  color: rgba(43,43,43,.8);
+  font-weight: 700;
+}
+body.home .review-card span{ display:block; margin-top: 10px; font-weight: 900; opacity:.8; }
+
+body.home .quick-links{
+  background: rgba(255,255,255,.6);
+  border: 1.5px solid rgba(75,58,47,.16);
+  border-radius: 18px;
+  padding: 16px 18px;
+  box-shadow: 0 14px 28px rgba(0,0,0,.06);
+}
+body.home .quick-item{
+  display:block;
+  padding: 12px 12px;
+  margin-top: 10px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.65);
+  border: 1px solid rgba(75,58,47,.12);
+  text-decoration:none;
+  color: rgba(43,43,43,.85);
+  font-weight: 900;
+}
+
+/* RWD */
+@media (max-width: 980px){
+  body.home .notice-grid,
+  body.home .trust-grid{ grid-template-columns: 1fr; }
+  body.home .rank-grid{ grid-template-columns: repeat(2, 1fr); }
+  body.home .review-cards{ grid-template-columns: 1fr; }
+}
+/* Category 拼貼分類牆（pawpaw風） */
+
+body.home .catwall{
+  margin-top: 14px;
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.55);
+  border: 1.5px solid rgba(75,58,47,.16);
+  box-shadow: 0 18px 40px rgba(0,0,0,.08);
+}
+
+/* 上排兩張大卡 */
+body.home .catwall-top{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+body.home .cw-card{
+  display:block;
+  text-decoration:none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1.5px solid rgba(75,58,47,.16);
+  background: rgba(255,255,255,.65);
+  box-shadow: 0 14px 28px rgba(0,0,0,.06);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+body.home .cw-card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 20px 38px rgba(0,0,0,.10);
+}
+
+body.home .cw-big{
+  min-height: 180px;
+  padding: 16px;
+  display:grid;
+  grid-template-columns: 1.1fr .9fr;
+  align-items:center;
+  gap: 12px;
+}
+
+body.home .cw-label .cw-title{
+  font-weight: 1000;
+  letter-spacing: 2px;
+  font-size: 28px;
+  color: rgba(43,43,43,.85);
+}
+body.home .cw-label .cw-sub{
+  margin-top: 6px;
+  font-weight: 900;
+  color: rgba(43,43,43,.65);
+}
+
+body.home .cw-cta{
+  position:absolute;
+  left: 16px;
+  bottom: 14px;
+  font-weight: 1000;
+  color: #ff8b2c;
+}
+
+/* 右邊示意圖 */
+body.home .cw-media{
+  background-position: center;
+  background-size: cover;   
+  background-repeat: no-repeat;
+}
+
+/* 不同卡片用不同色調 */
+body.home .cw-kitten .cw-media{
+  background-image: url("../img/cat-kitten.png");
+}
+body.home .cw-adult .cw-media{
+  background-image: url("../img/cat-adult.png");
+}
+body.home .cw-senior .cw-media{
+  background-image: url("../img/cat-senior.png");
+}
+/* 貼紙裝飾角落（像參考圖） */
+body.home .cw-big::before{
+  content:"";
+  position:absolute;
+  left:-18px; top:-18px;
+  width: 80px; height: 80px;
+  border-radius: 26px;
+  background: rgba(243,198,167,.45);
+  transform: rotate(16deg);
+}
+body.home .cw-big::after{
+  content:"";
+  position:absolute;
+  right:-24px; bottom:-24px;
+  width: 110px; height: 110px;
+  border-radius: 34px;
+  background: rgba(216,234,246,.55);
+  transform: rotate(-12deg);
+}
+
+/* 下排小卡：拼貼格 */
+body.home .catwall-bottom{
+  display:grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+body.home .cw-small{
+  padding: 14px 14px;
+  min-height: 92px;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+body.home .cw-mini-title{
+  display:block;
+  font-weight: 1000;
+  letter-spacing: 2px;
+  font-size: 14px;
+  color: rgba(43,43,43,.85);
+}
+body.home .cw-mini-sub{
+  display:block;
+  margin-top: 6px;
+  font-weight: 900;
+  font-size: 12px;
+  color: rgba(43,43,43,.60);
+}
+
+body.home .cw-icon{
+  width: 44px; height: 44px;
+  border-radius: 16px;
+  display:grid; place-items:center;
+  background: rgba(255,255,255,.75);
+  border: 1px solid rgba(75,58,47,.12);
+  font-size: 20px;
+}
+
+/* footer */
+body.home .catwall-footer{
+  display:flex;
+  justify-content:center;
+  margin-top: 14px;
+}
+
+/* RWD：平板/手機變成更合理排列 */
+@media (max-width: 980px){
+  body.home .catwall-bottom{
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 560px){
+  body.home .catwall-top{
+    grid-template-columns: 1fr;
+  }
+  body.home .catwall-bottom{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+/* 覆蓋：Category 改成 3 大卡 + 4 小卡  */
+body.home .catwall-top{
+  grid-template-columns: repeat(3, 1fr);
+}
+
+body.home .catwall-bottom{
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* 第三張熟齡配色 */
+body.home .cw-senior .cw-media{
+  background: linear-gradient(135deg, rgba(240,245,220,.62), rgba(255,221,221,.55));
+}
+
+/* RWD */
+@media (max-width: 980px){
+  body.home .catwall-top{ grid-template-columns: 1fr; }
+  body.home .catwall-bottom{ grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ===== 防呆：overlay 預設不顯示、不吃點擊（避免蓋住客服） ===== */
+body.home .overlay,
+body.home #cartOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 9000;
+  transition: opacity .18s ease, visibility .18s ease;
+}
+
+/* 只要 cart.js 開啟時加到這些 class 的其中一個，就會顯示 */
+body.home .overlay.active,
+body.home .overlay.show,
+body.home .overlay.open,
+body.home .overlay.is-open,
+body.home #cartOverlay.active,
+body.home #cartOverlay.show,
+body.home #cartOverlay.open,
+body.home #cartOverlay.is-open{
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* 客服按鈕永遠在最上層，可點 */
+body.home #meow-chat-trigger{
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  z-index: 99999;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+
+
+
+body.home .cart-sidebar,
+body.home #cartSidebar{
+  z-index: 9001;
+}
+body.home #meow-chat-trigger svg{
+  pointer-events: none;
+}
+
+/* 排行榜圖片：讓背景圖正常顯示 */
+body.home .rank-img{
+  background-position: center;
+  background-size: cover;     
+  background-repeat: no-repeat;
+}
+
+/* 指定每張卡的圖片（用 nth-child 對應第幾張） */
+body.home .rank-grid .rank-card:nth-child(1) .rank-img{
+  background-image: url("../img/commodity-photo/catfoodone.jpg");
+}
+body.home .rank-grid .rank-card:nth-child(2) .rank-img{
+  background-image: url("../img/commodity-photo/catlittertwo.jpg");
+}
+body.home .rank-grid .rank-card:nth-child(3) .rank-img{
+  background-image: url("../img/commodity-photo/catlitterone.jpg");
+}
+body.home .rank-grid .rank-card:nth-child(4) .rank-img{
+  background-image: url("../img/commodity-photo/four.jpg");
+}

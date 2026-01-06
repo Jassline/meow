@@ -1,0 +1,235 @@
+* {
+    box-sizing: border-box;
+}
+/* --- 基礎設定 --- */
+body {
+    font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+    background-color: #f9f1db;
+    margin: 0;
+    color: #333;
+ 
+    
+}
+nav {
+    position: fixed; top: 0; width: 100%; height: 70px;
+    box-sizing: border-box;
+    background: #f5be70;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 5%; z-index: 900; 
+}
+
+.logo { font-size: 1.5rem; font-weight: bold; color: #ff9f43; text-decoration: none; }
+.nav-links a { 
+    margin-right: 10px; 
+    text-decoration: none; 
+    color: #503824;
+    font-weight: 500; 
+    padding: 10px 15px; 
+    border-radius: 12px; 
+    transition: 0.3s; 
+}
+.nav-links a:hover { 
+    background-color: rgba(255, 255, 255, 0.4); 
+    color: #fff;
+}
+#cart-btn { background: #333; color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+
+
+
+/* 這裡是專門放背景圖的層，只有這裡會變透明 */
+body::before {
+    content: "";
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* 設定背景圖片與重複 */
+    background-image: url('../img/member/member-background.png');
+    
+    /* --- 調整透明度 --- */
+    opacity: 0.15; 
+    
+    z-index: -1; /* 確保它在所有內容（登入框）的後方 */
+    pointer-events: none; /* 讓滑鼠點擊可以直接穿過這一層 */
+}
+/* --- Header & 融化特效區 --- */
+.main-header {
+    position: relative;
+    height: 220px; /* 縮短整體高度 */
+    background-color: transparent; /* 移除白底 */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-text {
+    position: relative;
+    padding-top: 100px; 
+    text-align: center;
+    z-index: 10;
+    color: #342417;
+}
+
+.header-text h1 {
+    font-size: 1.5rem; 
+    margin: 0 20px;
+}
+
+
+.melt-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 225px;
+    z-index: 1;
+}
+
+.melt-container svg {
+    width: 100%;
+    height: 100%;
+    animation: slideDown 1.5s ease-out forwards;
+}
+
+@keyframes slideDown {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(0); }
+}
+
+/* --- 容器與卡片樣式 --- */
+.container {
+    max-width: 500px; 
+    margin: 0 auto;  
+    padding: 20px;
+}
+
+.auth-card, 
+.info-section {
+    width: 100%;              
+    max-width: 460px;          
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;      
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    margin: 40px auto 0;       
+    box-sizing: border-box;    
+}
+
+
+.auth-card {
+    margin-top: 80px; 
+}
+.section-title {
+    font-size: 1rem;
+    border-bottom: 2px solid #feed9a;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
+
+/* --- 表單控制 --- */
+.form-group { margin-bottom: 15px; }
+label { display: block; font-size: 0.85rem; margin-bottom: 5px; }
+.required { color: #e91e63; margin-right: 4px; }
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* --- 按鈕樣式 --- */
+.btn-fb {
+    width: 100%;
+    background-color: #4b69b0;
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 4px;
+}
+
+.btn-dark-login {
+    width: 100%;
+    background-color: #333; 
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 4px;
+    color: white;
+}
+
+.btn-dark-small {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* --- 其他元件 --- */
+.divider {
+    text-align: center;
+    position: relative;
+    margin: 20px 0;
+}
+.divider::before {
+    content: "";
+    position: absolute;
+    top: 50%; width: 100%; height: 1px;
+    background: #eee; z-index: 1; left: 0;
+}
+.divider span {
+    background: #fff; padding: 0 10px;
+    position: relative; z-index: 2; color: #aaa; font-size: 0.8rem;
+}
+
+.auth-footer { text-align: center; margin-top: 20px; }
+.auth-footer a {
+    display: block; color: #f0c09b; 
+    text-decoration: none; font-size: 0.85rem; margin-bottom: 8px;
+}
+.melt-path {
+    fill: #f5be70; 
+    transition: fill 0.3s ease; 
+}
+
+/* 確保按鈕與連結看起來一致 */
+.btn-dark-small {
+    display: block;                
+    width: 100%;                
+    padding: 12px;               
+    background-color: #503824;   
+    color: white !important;     
+    text-align: center;          
+    text-decoration: none;        
+    border-radius: 8px;           
+    font-size: 16px;
+    margin-top: 15px;            
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+/* 滑鼠移上去的顏色變化*/
+.btn-dark-small:hover {
+    background-color: #3e2b1c;    
+    color: #ff9f43 !important;    
+}
+

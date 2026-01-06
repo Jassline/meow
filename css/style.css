@@ -1,0 +1,857 @@
+/* 全域設定 */
+html { scroll-behavior: smooth; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: "Microsoft JhengHei", sans-serif; }
+body { line-height: 1.6; color: #333; overflow-x: hidden; background-color: #fdfdfd; padding-top: 70px; }
+
+/* 導覽列 */
+nav {
+    position: fixed; top: 0; width: 100%; height: 70px;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 5%; z-index: 900; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.logo { font-size: 1.5rem; font-weight: bold; color: #ff9f43; text-decoration: none; }
+.nav-links a { margin-right: 25px; text-decoration: none; color: #333; font-weight: 500; transition: 0.3s; }
+.nav-links a:hover { color: #ff9f43; }
+#cart-btn { background: #333; color: white; border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+
+/* --- 購物車側欄修復區 (只動這裡) --- */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(400px, 90vw);
+    background: white;
+    z-index: 2000;
+    transform: translateX(100%); /* 預設在右邊外面 */
+    transition: transform 0.4s ease;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+.cart-sidebar.open { transform: translateX(0); }
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1900;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+.overlay.open { opacity: 1; pointer-events: auto; }
+
+.cart-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+.cart-items { flex: 1; overflow-y: auto; padding: 20px; }
+.cart-footer { padding: 20px; border-top: 1px solid #eee; }
+.cart-total-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: bold; }
+.checkout-btn { width: 100%; padding: 12px; background: #ff9f43; color: white; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; }
+.qty-btn { width: 25px; height: 25px; border-radius: 50%; border: 1px solid #ddd; background: white; cursor: pointer; }
+.icon-btn { background: none; border: none; font-size: 24px; cursor: pointer; }
+
+/* 首頁 Hero 區塊 */
+.hero { 
+    height: 60vh; background: #fffaf5; 
+    display: flex; flex-direction: column; justify-content: center; align-items: center; 
+    text-align: center; border-bottom: 1px solid #eee;
+}
+.hero h1 { font-size: 3rem; color: #333; margin-bottom: 10px; }
+
+/* 商城與詳情頁樣式 */
+.container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+.product-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; padding-bottom: 20px; transition: 0.3s; }
+.product-card img { width: 100%; height: 220px; object-fit: cover; }
+.price { color: #ee5253; font-weight: bold; }
+
+/* 按鈕樣式 */
+.btn-add { 
+    background: #ff9f43; 
+    color: white; 
+    border: none; 
+    padding: 12px 25px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 1rem; 
+    font-weight: bold;
+    transition: all 0.2s ease; /* 讓變化變平滑 */
+}
+/* 滑鼠移上去變深一點 */
+.btn-add:hover {background: #e68a2e;transform: translateY(-2px); /* 輕微上浮 */}
+/* 按下去的效果 (Active) */
+.btn-add:active { background: #cc7a29;transform: scale(0.95); /* 縮小 5% */}
+
+/* 同理，幫其他按鈕也加上點擊感 */
+.checkout-btn:active, .flavor-btn:active {transform: scale(0.95);}
+.flavor-btn { padding: 5px 15px; border: 1px solid #ddd; background: white; cursor: pointer; border-radius: 20px; margin-right: 5px; }
+.flavor-btn.active { background: #ff9f43; color: white; border-color: #ff9f43; }
+
+/* 關於我們 (欸比負責) */
+.about-section { background: #fff; padding: 80px 10%; text-align: center; }
+.team-container { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 40px; }
+.team-member { width: 150px; margin: 20px; text-align: center; }
+.member-pic { width: 80px; height: 80px; background: #ffeedd; border-radius: 50%; margin: 0 auto 10px; line-height: 80px; font-size: 14px; color: #ff9f43; border: 2px solid #ff9f43; }
+
+/* --- 結帳頁面專用樣式 --- */
+.checkout-container { display: flex; gap: 40px; margin-top: 30px; flex-wrap: wrap; }
+.form-card { flex: 1.5; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); min-width: 350px; }
+.summary-card { flex: 1; background: #fffaf5; padding: 30px; border-radius: 15px; border: 1px solid #ffeaa7; height: fit-content; }
+
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.9rem; color: #555; }
+.form-group input, .form-group select { 
+    width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; transition: 0.3s;
+}
+.form-group input:focus, .form-group select:focus { border-color: #ff9f43; outline: none; box-shadow: 0 0 5px rgba(255,159,67,0.2); }
+
+.address-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+.checkout-item { display: flex; align-items: center; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 8px; }
+.checkout-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 12px; border: 1px solid #eee; }
+.checkout-item-info { flex: 1; font-size: 0.9rem; }
+.order-total-section { margin-top: 20px; padding-top: 20px; border-top: 2px dashed #ff9f43; }
+
+/* 結帳與購物車共用的數量按鈕  */
+.qty-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.qty-btn:hover {
+    background: #f0f0f0;
+    border-color: #bbb;
+}
+
+.qty-btn:active {
+    transform: scale(0.9);
+    background: #e0e0e0;
+}
+
+/*組員介紹*/
+/* --- 團隊分工區：150字心得大空間版 --- */
+.team-detailed-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 50px;
+}
+
+.detailed-member-card {
+    display: flex;
+    background: #fff;
+    border-radius: 25px;
+    box-shadow: 0 10px 40px rgba(255,159,67,0.1);
+    overflow: hidden;
+    border: 1px solid #fff5e6;
+    transition: 0.3s;
+    min-height: 250px;
+}
+
+.detailed-member-card:hover {
+    transform: translateX(10px); 
+    box-shadow: 0 15px 50px rgba(255,159,67,0.15);
+}
+
+/* 左側：個人形象區 */
+.member-sidebar {
+    width: 30%;
+    background: #fffaf5;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px dashed #ffeaa7;
+    position: relative;
+}
+
+/* 右側：內容資訊區 */
+.member-main-content {
+    width: 70%;
+    padding: 40px;
+    text-align: left;
+}
+
+.member-avatar-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #ff9f43;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.member-avatar-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member-info-text h3 { font-size: 1.4rem; color: #333; margin-bottom: 5px; }
+.member-info-text p { color: #888; font-size: 0.9rem; }
+
+.work-tag {
+    background: #ff9f43; color: white; padding: 4px 12px;
+    border-radius: 20px; font-size: 12px; font-weight: bold;
+    margin-top: 10px;
+}
+
+/* 任務與心得文字 */
+.task-label { color: #ff9f43; font-weight: bold; margin-bottom: 8px; display: block; }
+.thought-text {
+    line-height: 1.8;
+    color: #555;
+    font-size: 0.95rem;
+    white-space: pre-line; 
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* 手機版適應：變回上下排列 */
+@media (max-width: 850px) {
+    .detailed-member-card { flex-direction: column; }
+    .member-sidebar, .member-main-content { width: 100%; }
+    .member-sidebar { border-right: none; border-bottom: 1px dashed #ffeaa7; }
+}
+
+/* 顯示分工比例的小標籤 */
+.work-ratio {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #ff9f43;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.member-avatar {
+    width: 110px;         
+    height: 110px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    border: 3px solid #ff9f43;
+    overflow: hidden;     
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f0f0f0;   
+}
+
+.member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    
+    transition: 0.3s;
+}
+
+/* 滑鼠移上去照片會微微放大，更有互動感 */
+.member-avatar img {
+    transform: scale(1.1);
+}
+
+.member-name { font-size: 1.2rem; font-weight: bold; color: #333; margin-bottom: 5px; }
+.member-id { font-size: 0.9rem; color: #aaa; margin-bottom: 15px; }
+
+/* 負責事項清單 */
+.member-tasks {
+    text-align: left;
+    background: #fffaf5;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+.member-tasks span { color: #ff9f43; font-weight: bold; display: block; margin-bottom: 5px; }
+
+/* 心得文字泡泡 */
+.member-thought {
+    font-size: 0.85rem;
+    color: #666;
+    font-style: italic;
+    line-height: 1.6;
+    position: relative;
+    padding-top: 10px;
+    border-top: 1px dashed #ddd;
+}
+
+/***** 滑 */
+/* ===== Home section ===== */
+.home-block { padding: 40px 0; }
+.container { width: min(1100px, calc(100% - 32px)); margin: 0 auto; }
+.block-title { margin: 0 0 12px; font-size: 1.4rem; }
+.block-sub { margin: 0 0 14px; color: #777; }
+
+/* ===== Promo Carousel ===== */
+.promo-carousel{
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,.08);
+  background: #fff;
+}
+.promo-track{ display:flex; transition: transform .45s ease; }
+.promo-slide{
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  text-decoration: none;
+  color: inherit;
+}
+@media (max-width: 860px){ .promo-slide{ grid-template-columns: 1fr; } }
+
+.promo-media{
+  height: 240px;              
+  border-radius: 18px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.promo-1{
+  background-image: url("../img/promo-1.png"); }
+.promo-2{
+  background-image: url("../img/promo-2.png");
+}
+.promo-3{
+  background-image: url("../img/promo-3.png");
+}
+
+.promo-text{ padding: 28px; display:flex; flex-direction:column; justify-content:center; }
+.promo-tag{
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.06);
+  font-weight: 700;
+  font-size: .8rem;
+  margin: 0 0 10px;
+}
+.promo-title{ margin: 0 0 8px; font-size: clamp(1.2rem, 2.6vw, 2rem); }
+.promo-desc{ margin: 0 0 12px; color:#666; line-height:1.7; }
+.promo-cta{
+  width: fit-content;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(0,0,0,.06);
+  font-weight: 800;
+}
+
+.promo-btn{
+  position:absolute; top:50%; transform: translateY(-50%);
+  width: 40px; height: 40px; border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.85);
+  cursor:pointer; font-size: 24px;
+  display:grid; place-items:center;
+}
+.promo-btn:hover{ background: rgba(255,255,255,.95); }
+.promo-btn.prev{ left: 12px; }
+.promo-btn.next{ right: 12px; }
+
+.promo-dots{
+  position:absolute; left:0; right:0; bottom: 12px;
+  display:flex; justify-content:center; gap: 8px;
+}
+.dot{
+  width: 10px; height: 10px; border-radius: 999px;
+  border:0; background: rgba(0,0,0,.25); cursor:pointer;
+}
+.dot.is-active{ background: rgba(0,0,0,.55); }
+
+/* ===== Age cards ===== */
+.age-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 12px;
+}
+@media (max-width: 860px){ .age-grid{ grid-template-columns: 1fr; } }
+
+.age-card{
+  text-decoration:none; color: inherit;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 16px;
+  padding: 18px;
+  background: #fff;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.age-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,.06);
+}
+.age-emoji{ font-size: 26px; }
+.age-card h3{ margin: 10px 0 6px; }
+.age-card p{ margin: 0 0 10px; color:#666; line-height:1.6; }
+.age-link{ font-weight: 800; }
+
+/*陳欣怡的*/
+
+.product-main-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+.product-detail-flex { display: flex; gap: 50px; flex-wrap: wrap; }
+.product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    background-color: #f9f9f9;
+}
+/* 讓查看詳情變成橘色按鈕 */
+.product-card a {
+    display: inline-block;
+    margin: 10px 0;
+    padding: 10px 25px;
+    background-color: #ff9f43; 
+    color: white !important;   
+    text-decoration: none;     
+    border-radius: 25px;       
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: all 0.3s ease; 
+}
+/* 滑鼠移上去的特效 */
+.product-card a:hover {
+    background-color: #333;    
+    transform: translateY(-3px); 
+    box-shadow: 0 5px 15px rgba(255,159,67,0.3); 
+}
+.product-info-box { flex: 1; min-width: 300px; }
+.flavor-btns { margin: 20px 0; }
+.flavor-btn { padding: 8px 15px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 5px; margin-right: 10px; }
+.flavor-btn.active { border-color: #ff9f43; color: #ff9f43; background: #fff9f0; }
+.suitability-box { background: #fff9f0; padding: 15px; border-radius: 10px; margin: 20px 0; border: 1px solid #ffeaa7; }
+.suit-stars { color: #ff9f43; margin-left: 10px; font-weight: bold; }
+/* ===== 評價區 ===== */
+.review-section {
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+    padding-top: 30px;
+}
+.review-name {
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.star-rating {
+    font-size: 26px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.star {
+    font-size: 28px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star.active {
+    color: #ff9f43;
+}
+
+.review-text {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    resize: none;
+    margin-bottom: 10px;
+}
+.review-section {
+  height: auto;
+  overflow: visible;
+}
+
+
+/* 💬 評論輸入框 */
+.review-text {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+/* --- 返回按鈕樣式 --- */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #ff9f43;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.back-btn:hover { color: #333; }
+
+.shop-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.filter-sidebar {
+    width: 180px;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.filter-sidebar h3 {
+    margin-bottom: 15px;
+}
+
+.filter-sidebar label {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+/* Skip link */
+.skip-link{
+  position:absolute; left:-999px; top:10px;
+  background:#111; color:#fff; padding:10px 12px; border-radius:10px;
+  z-index:9999;
+}
+.skip-link:focus{ left:10px; }
+
+/* Header / Nav (行動版) */
+.site-header{ position:sticky; top:0; z-index:1000; backdrop-filter: blur(10px); }
+.site-nav{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; }
+.nav-toggle{ display:none; font-size:18px; padding:8px 10px; border-radius:12px; }
+
+
+@media (max-width: 860px){
+  .nav-toggle{ display:inline-flex; }
+  .nav-links{
+    position:absolute; right:18px; top:64px;
+    display:none; flex-direction:column; gap:10px;
+    padding:14px; border-radius:16px;
+    background:rgba(255,255,255,.95);
+    box-shadow: 0 20px 50px rgba(0,0,0,.12);
+  }
+  .nav-links.is-open{ display:flex; }
+}
+
+/* Hero CTA + 信任資訊 */
+.hero-inner{ max-width: 980px; margin: 0 auto; padding: 48px 18px; }
+.hero-actions{ display:flex; gap:12px; margin-top:16px; flex-wrap:wrap; }
+.btn{ display:inline-block; padding:12px 16px; border-radius:14px; text-decoration:none; font-weight:700; }
+.btn.primary{ background:#111; color:#fff; }
+.btn.ghost{ border:1px solid rgba(0,0,0,.18); color:#111; background:transparent; }
+
+.trust-row{ list-style:none; display:flex; gap:14px; padding:0; margin:18px 0 0; flex-wrap:wrap; color:#555; }
+
+/* Cart overlay/dialog（配合 JS） */
+/* ===== Cart：預設收起（不會一直黏在右邊）===== */
+.cart-sidebar{
+  position: fixed;
+  top: 0; right: 0;
+  height: 100vh;
+  width: min(420px, 92vw);
+  background: #fff;
+  transform: translateX(100%);   /* 預設藏起來 */
+  transition: transform .25s ease;
+  z-index: 1300;
+}
+.cart-sidebar.open{ transform: translateX(0); }  /* 打開時才顯示 */
+
+.overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  z-index: 1200;
+}
+.overlay.open{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.icon-btn{ background:transparent; border:0; font-size:26px; cursor:pointer; }
+
+.cart-total-row{
+  display:flex; justify-content:space-between;
+  margin-bottom:15px; font-weight:bold;
+}
+
+/* Footer */
+.site-footer{ padding:40px 18px; text-align:center; color:#999; font-size:.9rem; }
+
+/*AI客服*/
+/* --- AI 客服視窗縮放功能 --- */
+#chat-window {
+    display: flex;
+    flex-direction: column;
+    resize: both;        
+    overflow: hidden;   
+    min-width: 300px;
+    min-height: 400px;
+    max-width: 90vw;
+    max-height: 85vh;
+}
+
+/* 確保內部的對話區域會跟著外框自動變大 */
+#chat-messages {
+    flex: 1;           
+    overflow-y: auto;   
+}
+/* ===== 聊天視窗：預設關閉 ===== */
+#meow-chat-window{
+  position: fixed;
+  right: 18px;
+  bottom: 88px;
+  width: min(360px, calc(100vw - 36px));
+  max-height: min(70vh, 520px);
+  display: none;
+  z-index: 99998;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 50px rgba(0,0,0,.18);
+  resize: none !important; 
+  overflow: visible;
+}
+.resizer-tl {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: nwse-resize; /* 顯示縮放的指標 */
+    z-index: 10001;
+    background: transparent; 
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 2px;
+}
+
+/* 用偽元素畫出小斜線*/
+.resizer-tl::after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background-image: linear-gradient(
+        135deg, 
+        #000000 10%, transparent 10%, 
+        transparent 30%, #000000 30%, 
+        #000000 40%, transparent 40%, 
+        transparent 60%, #000000 60%, 
+        #000000 70%, transparent 70%
+    );
+    background-size: 100% 100%;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+}
+
+/* 1. 客服視窗主體 */
+#meow-chat-window {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 350px;    
+    height: 500px;   
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    display: none;   
+    flex-direction: column;
+    z-index: 9999;
+    resize: both;        
+    overflow: hidden;   
+    
+    /* 設定縮放極限，防止奴才拉到不見 */
+    min-width: 300px;
+    min-height: 350px;
+    max-width: 90vw;
+    max-height: 85vh;
+}
+
+#meow-chat-window.active,
+#meow-chat-window.is-open{
+  display: flex !important;
+  flex-direction: column;
+}
+#meow-chat-trigger svg{
+  pointer-events: none;
+}
+
+/* 當大臣出現時的顯示狀態 */
+#meow-chat-window.active {
+    display: flex;
+}
+
+/* 2. 標題列（維持固定高度） */
+.chat-header {
+    background: #ff9f43;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px 15px 0 0;
+    flex-shrink: 0; /* 縮放時標題不要變形 */
+}
+
+/* 3. ✨ 訊息顯示區（這塊要會自動吃掉剩餘空間） */
+.chat-messages {
+    flex: 1;            /* 自動填滿剩下的垂直空間 */
+    overflow-y: auto;   /* 訊息多時出現捲軸 */
+    padding: 15px;
+    background: #fdfdfd;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 4. 輸入區域（維持在底部） */
+.chat-input-area {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    background: white;
+    flex-shrink: 0; /* 縮放時輸入框不要縮掉 */
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+}
+
+.chat-send-btn {
+    background: #ff9f43;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* 5. 訊息泡泡樣式 */
+.msg {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+.msg-bot {
+    background: #f0f0f0;
+    align-self: flex-start;
+    color: #333;
+    border-bottom-left-radius: 2px;
+}
+.msg-user {
+    background: #ff9f43;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+
+/* 大臣正在輸入的狀態 */
+.typing-status {
+    padding: 0 15px 5px;
+    font-size: 12px;
+    color: #888;
+    display: none;
+}
+
+
+#chat-window::-webkit-resizer {
+    background-color: #ff9f43;
+    border-radius: 50% 0 0 0;
+}
+#meow-chat-trigger { 
+    position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; 
+    background-color: #ff9f43; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+    cursor: pointer; z-index: 9999; display: flex; align-items: center; justify-content: center; 
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+#meow-chat-trigger:hover { transform: scale(1.1); }
+
+#meow-chat-window { 
+    position: fixed; bottom: 90px; right: 20px; width: 320px; height: 450px; 
+    background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+    display: none; flex-direction: column; overflow: hidden; z-index: 9998; 
+    font-family: "Microsoft JhengHei", sans-serif; border: 1px solid #eee; 
+}
+#meow-chat-window.active { display: flex; animation: chatSlideIn 0.3s ease-out; }
+
+@keyframes chatSlideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.chat-header { background: #ff9f43; color: white; padding: 12px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 15px; background: #fdfdfd; display: flex; flex-direction: column; gap: 10px; }
+.msg { max-width: 85%; padding: 8px 12px; border-radius: 12px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
+.msg-bot { background: #f0f0f0; align-self: flex-start; border-bottom-left-radius: 2px; color: #333; }
+.msg-user { background: #ff9f43; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+.chat-input-area { padding: 10px; border-top: 1px solid #eee; display: flex; gap: 5px; background: white; }
+.chat-input { flex: 1; border: 1px solid #ddd; padding: 8px 12px; border-radius: 20px; outline: none; font-size: 14px; }
+.chat-send-btn { background: #333; color: white; border: none; padding: 0 15px; border-radius: 20px; cursor: pointer; transition: 0.2s; }
+.chat-send-btn:hover { background: #555; }
+.typing-status { font-size: 11px; color: #aaa; padding: 5px 15px; display: none; background: #fdfdfd; }
+
+/* 收件資訊切換器樣式 */
+.info-switch-container {
+    display: flex;
+    background: #f0f0f0;
+    padding: 5px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    gap: 5px;
+}
+.info-switch-item {
+    flex: 1;
+    position: relative;
+}
+.info-switch-item input[type="radio"] {
+    display: none; 
+}
+.info-switch-item label {
+    display: block;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    color: #666;
+}
+/* 當按鈕被選中時 */
+.info-switch-item input[type="radio"]:checked + label {
+    background: #fff;
+    color: #ff9f43;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+input[readonly] {
+    border: 1px dashed #ccc !important;
+    color: #888;
+}
